@@ -1,10 +1,19 @@
 import React, { Suspense, useState, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
-import BanzaiTree from './components/BanzaiTree';
+import BanzaiTree, { ShaderController } from './components/BanzaiTree';
 import TreeControls from './components/TreeControls';
 import * as THREE from 'three';
 import { ErrorBoundary } from 'react-error-boundary';
+
+// Import shader names from BanzaiTree
+const shaderNames = [
+  "Standard",
+  "Glow",
+  "Pattern",
+  "Tree",
+  "Hologram"
+];
 
 const themes = [
   { name: 'default', color: '#b499e4' },
@@ -35,6 +44,7 @@ export default function App() {
   const [currentTheme, setCurrentTheme] = useState(themes[0].name);
   const [currentShape, setCurrentShape] = useState('box');
   const [isSpinning, setIsSpinning] = useState(true);
+  const [shaderType, setShaderType] = useState(0);
   
   const handleColorChange = (colorIndex) => {
     setTreeColor(colorIndex);
@@ -136,6 +146,13 @@ export default function App() {
                   >
                     {isSpinning ? 'Stop Spin' : 'Start Spin'}
                   </button>
+                  
+                  <button 
+                    className="start-button"
+                    onClick={() => setShaderType((prev) => (prev + 1) % 5)}
+                  >
+                    {shaderNames[shaderType]} Shader
+                  </button>
                 </div>
               </div>
               
@@ -178,6 +195,8 @@ export default function App() {
                         color={themes[treeColor].color} 
                         shape={currentShape}
                         isSpinning={isSpinning}
+                        shaderType={shaderType}
+                        setShaderType={setShaderType}
                       />
                     </Suspense>
                     <OrbitControls

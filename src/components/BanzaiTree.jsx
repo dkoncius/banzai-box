@@ -1,31 +1,74 @@
-import { useRef, useState, useEffect } from 'react';
-import { useFrame } from '@react-three/fiber';
-import { useThree } from '@react-three/fiber';
+import { useRef, useState } from 'react';
+import { useFrame, useThree } from '@react-three/fiber';
 import { GlowShaderMaterial } from '../shaders/GlowShaderMaterial';
 import { PatternShaderMaterial } from '../shaders/PatternShaderMaterial';
 import { TreeShaderMaterial } from '../shaders/TreeShaderMaterial';
 import { HologramShaderMaterial } from '../shaders/HologramShaderMaterial';
 import * as THREE from 'three';
 
+// Shader names for the controller
+const shaderNames = [
+  "Standard",
+  "Glow",
+  "Pattern",
+  "Tree",
+  "Hologram"
+];
+
+// Controller component to change shaders
+export function ShaderController({ shaderType, setShaderType }) {
+  const handleChangeShader = () => {
+    setShaderType((prev) => (prev + 1) % 5);
+  };
+
+  return (
+    <div style={{
+      position: 'absolute',
+      bottom: '0',
+      left: '0',
+      right: '0',
+      zIndex: 1000,
+      padding: '15px',
+      display: 'flex',
+      justifyContent: 'center',
+    }}>
+      <button 
+        onClick={handleChangeShader}
+        style={{
+          backgroundColor: 'var(--button-bg, #b499e4)',
+          color: 'var(--button-text, white)',
+          border: 'none',
+          padding: '0.8rem 1.5rem',
+          borderRadius: '2rem',
+          display: 'flex',
+          alignItems: 'center',
+          fontWeight: '500',
+          cursor: 'pointer',
+          width: '100%',
+          justifyContent: 'center',
+          textAlign: 'center',
+          maxWidth: '300px',
+          boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
+        }}
+      >
+        {shaderNames[shaderType]} Shader
+        <span style={{ marginLeft: '0.5rem' }}>→</span>
+      </button>
+    </div>
+  );
+}
+
 export default function BanzaiTree({ 
   color = '#b499e4',
   size = 0.8,
   shape = 'box',
-  isSpinning = true
+  isSpinning = true,
+  shaderType = 0,
+  setShaderType = () => {}
 }) {
   const group = useRef();
   const materialRef = useRef();
-  const [shaderType, setShaderType] = useState(0); // 0: Standard, 1: Glow, 2: Pattern, 3: Tree, 4: Hologram
   const clock = useRef(new THREE.Clock());
-  
-  // Effect to cycle through shader types every 5 seconds
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setShaderType((prev) => (prev + 1) % 5);
-    }, 5000);
-    
-    return () => clearInterval(timer);
-  }, []);
   
   // Animation
   useFrame((state, delta) => {
