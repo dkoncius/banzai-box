@@ -7,7 +7,7 @@ import { HologramShaderMaterial } from '../shaders/HologramShaderMaterial';
 import * as THREE from 'three';
 
 // Shader names for the controller
-const shaderNames = [
+export const shaderNames = [
   "Standard",
   "Glow",
   "Pattern",

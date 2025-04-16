@@ -1,19 +1,12 @@
 import React, { Suspense, useState, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
-import BanzaiTree, { ShaderController } from './components/BanzaiTree';
+import BanzaiTree, { ShaderController, shaderNames } from './components/BanzaiTree';
 import TreeControls from './components/TreeControls';
+import NameShapeGenerator from './components/NameShapeGenerator';
+import CollaborativeStructure from './components/CollaborativeStructure';
 import * as THREE from 'three';
 import { ErrorBoundary } from 'react-error-boundary';
-
-// Import shader names from BanzaiTree
-const shaderNames = [
-  "Standard",
-  "Glow",
-  "Pattern",
-  "Tree",
-  "Hologram"
-];
 
 const themes = [
   { name: 'default', color: '#b499e4' },
@@ -213,6 +206,22 @@ export default function App() {
               </div>
             </div>
           </div>
+        </div>
+        
+        <div className="community-section">
+          <h2 className="section-title">Join Our Community Gallery</h2>
+          <NameShapeGenerator />
+        </div>
+        
+        <div className="community-section">
+          <h2 className="section-title">Build Together</h2>
+          <p className="section-description">
+            Create collaborative structures by combining shapes from the community gallery.
+            Position them in 3D space to build unique compositions!
+          </p>
+          <ErrorBoundary FallbackComponent={FallbackComponent}>
+            <CollaborativeStructure />
+          </ErrorBoundary>
         </div>
       </div>
       
